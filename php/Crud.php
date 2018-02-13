@@ -1,5 +1,5 @@
 <?php
-include_once 'DbConfig.php';
+include_once 'db_config.php';
 
 class Crud extends DbConfig{
     public function __construct(){

@@ -58,32 +58,39 @@
             <input type="text" class="form-control" id="election_name">
           </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-6">
           <div class="form-group">
-            <label for="date">Commencing Date :</label>
-            <input type="date" class="form-control" id="start_date">
-          </div>
-        </div>
-        <div class="col-sm-3">
-          <div class="form-group">
-            <label for="date">Time :</label>
-            <input type="time" class="form-control" id="start_date">
+            <label for="date">Institute Name :</label>
+            <input type="text" class="form-control" id="institute_name">
           </div>
         </div>
       </div>
       <div class="row">
-        <div class="col-sm">
+        <div class="col-sm-3">
           <div class="form-group">
-            <label for="election_name">Number of Parties / Committees :</label>
+            <label for="election_name">Committee Count :</label>
             <input type="number" class="form-control" id="parties_count">
           </div>
         </div>
-        <div class="col-sm">
+        <div class="col-sm-3">
           <div class="form-group">
-            <label for="date">Maximum Nominees for a Single Party :</label>
-            <input type="number" class="form-control" id="max_nominee_count">
+            <label for="date">Commencing Date :</label>
+            <input type="date" class="form-control" id="date">
           </div>
         </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label for="date">From :</label>
+            <input type="time" class="form-control" id="start_time">
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label for="date">To :</label>
+            <input type="time" class="form-control" id="end_time">
+          </div>
+        </div>
+        
       </div>
       <hr class="light mb-5">
       <div class="text-center">

@@ -4,7 +4,7 @@ class DbConfig{
     private $_host='localhost';
     private $_username='root';
     private $_password='';
-    private $_database='accomodate_me_1';
+    private $_database='letsvote';
 
     protected $connection;
     public function __construct(){

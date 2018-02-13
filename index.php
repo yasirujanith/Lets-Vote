@@ -1,3 +1,10 @@
+<?php
+include_once("php/crud.php");
+session_start();
+// include ('php/index_be.php');
+$crud=new crud();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,6 +60,9 @@
         </div>
       </div>
     </nav>
+
+    <p id="demo"></p>
+    
     <header class="text-center text-white d-flex">
       <div class="container my-auto">
         <div class="row">
@@ -68,9 +78,10 @@
           <div class="col-lg-8 mx-auto">
             <p class="text-faded mb-2" style="font-size:1.4rem; font-weight:350;"><strong>Haven't signed into your <span class="header_highlight">profile</span> yet?</strong></p>
             <p class="text-faded mb-4" style="font-size:1.4rem; font-weight:350;"><strong>Use the <span class="header_highlight">pin number</span> that we've been sent to you to sign up for your voting profile!</strong></p>
-            <form>
-              <input type="text" style="width:300px; height:50px; font-size:18px" class="form-control col-lg-8 mx-auto pin" id="pin_value" placeholder="Enter your pin number here"><br>
-              <a class="btn btn-primary btn-xl" data-toggle="modal" data-target="#modalSignUp">Sign Up</a>
+            <form method="post">
+              <input type="text" style="width:300px; height:50px; font-size:18px" class="form-control col-lg-8 mx-auto pin" name="pin_value" id="pin_value" placeholder="Enter your pin number here"><br>
+              <button type="button" class="btn btn-primary btn-index btn-lg" id="signup_button" name="submit_signup">Sign Up</button>
+              
             </form>
           </div>
         </div>
@@ -114,42 +125,14 @@
               <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <!-- Modal body -->
-            <form action="/action_page.php">
-              <div class="modal-body">
-                <!-- Alert Box -->
-                <div class="alert alert-success alert-dismissable fade show">
-                    <button type="button" class="close" data-dismiss="alert" style="padding-bottom: 0px">&times;</button>
-                    <p>Registering Election: General Election-2018</p>
-                </div>
-                <div class="form-group">
-                  <div class="row" >
-                    <div class="form-group col-sm-6 mb-1">
-                      <label for="firstname">First Name:</label>
-                      <input type="text" class="form-control" id="firstname">
-                    </div>
-                    <div class="form-group col-sm-6">
-                      <label for="lastname">Last Name:</label>
-                      <input type="text" class="form-control" id="lastname">
-                    </div>
-                  </div>
-                </div>  
-                <div class="form-group">
-                  <label for="email">Email address:</label>
-                  <input type="email" class="form-control" id="email">
-                </div>
-                <div class="form-group">
-                  <label for="pwd">Password:</label>
-                  <input type="password" class="form-control" id="pwd">
-                </div>
-                <div class="form-group">
-                    <label for="pwd">Confirm Password:</label>
-                    <input type="password" class="form-control" id="con_pwd">
-                </div>
+            <form>
+              <div class="modal-body edit-content">
+                
               </div>
               <!-- Modal footer -->
               <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" style="float:right;">Submit</button>  
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="signupModal_submitButton" style="float:right;">Submit</button>  
+                <button type="button" class="btn btn-secondary" id="close_button" data-dismiss="modal">Close</button>
               </div>
             </form>
           </div>
@@ -200,10 +183,125 @@
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="vendor/scrollreveal/scrollreveal.min.js"></script>
     <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <!-- Custom scripts for this template -->
     <script src="js/creative.min.js"></script>
+    
+    <script>
+      $(document).ready(function(){
+        $("#signup_button").click(function(){
+          var pin_value = document.getElementById("pin_value").value;
+          if(pin_value!=''){              
+            $.ajax({
+              url: "php/index/index_be.php",
+              method: "POST",
+              data: {pin_value: pin_value},
+              success: function(data){
+                if(data=='1'){
+                  $("#modalSignUp").modal("toggle");
+                  $('#pin_value').val('');
+                }else if(data == '2'){
+                  JSalert_key_used();
+                  $('#pin_value').val('');
+                }else{
+                  JSalert_non_exist();
+                  $('#pin_value').val('');
+                }
+              }
+            });
+          }else{
+            //alert('Enter the pin number we have sent to you!');
+            JSalert_empty_input();
+          }
+        });
 
+        $("#signupModal_submitButton").click(function(){
+          var firstname = $('#signup_firstname').val();
+          var lastname = $('#signup_lastname').val();
+          var email = $('#signup_email').val();
+          var telephone = $('#signup_telephone').val();
+          var password = $('#signup_password').val();
+          var confirm_password = $('#signup_confirm_password').val();
+          console.log(firstname +" "+ lastname+" "+email+" "+telephone+" "+password+" "+confirm_password);
+          console.log(password == confirm_password);
+          if(password == confirm_password){
+            $.ajax({
+                url: "php/index/index_be.php",
+                method: "POST",
+                data: {firstname:firstname, lastname:lastname, email:email, telephone:telephone, password:password},
+                success: function(data){
+                  if(data == 'true'){
+                    //JSalert_useradding_success();
+                    $("#modalSignUp").modal("toggle");
+                    window.location.href = "http://localhost/letsvote/voter_home.php";
+                  }else{
+                    alert('failed');
+                  }
+                }
+            });
+          }else{
+            alert('passwords do not match!');
+          }
+        });
+
+      ///////////modal-data-passing//////////////////////////////////////
+        $('#modalSignUp').on('show.bs.modal', function(e) {
+          var $modal = $(this);
+          var pin_value = document.getElementById("pin_value").value;
+          //console.log(pin_value);
+          $.ajax({
+            cache: false,
+            method: 'POST',
+            url: 'php/index/signup_modal_body.php',
+            data: {pin_value : pin_value},
+            success: function(data) {
+                $modal.find('.edit-content').html(data);
+            }
+          });
+        })
+      ////////////////////////////////////////////////////////////////////
+      });
+
+      ////////////////////JS-Alerts///////////////////////////////////////
+      function JSalert_non_exist(){
+        swal({
+          title: "INVALID KEY", 
+          text: "No election is registered in this key",
+          icon: "error",
+          dangerMode: true,
+          button: "Try Again",
+        });
+      }
+      function JSalert_key_used(){
+        swal({
+          title: "EXPIRED KEY", 
+          text: "This key is already used",
+          icon: "error",
+          dangerMode: true,
+          button: "Try Again",
+        });
+      }
+      function JSalert_empty_input(){
+        swal({
+          title: "INSERT KEY", 
+          text: "Enter the pin value we have sent to you",
+          icon: "info",
+          dangerMode: true,          
+          button: "Try Again",
+        }); 
+      }
+      function JSalert_useradding_success(){
+        swal({
+          title: "SUCCESS", 
+          text: "User added successfully!",
+          icon: "success",
+          //dangerMode: true,
+          button: "Proceed",
+        });
+      }
+      //////////////////////////////////////////////////////////////////////
+    </script>
   </body>
 
 </html>
