@@ -1,19 +1,21 @@
 <?php
-include_once("../crud.php");
-$crud=new crud();
+include_once '../model/pin.php';
+include_once '../model/signup_modal.php';
+include_once '../controller/user_controller.php';
+include_once '../view/index_view.php';
+session_start();
+
 
 if(isset($_POST['pin_value'])){
     $pin_value=$_POST['pin_value'];
-    $query_electionKeys=($crud->getData("SELECT * FROM election_keys WHERE election_key='$pin_value'"));
-    if(!empty($query_electionKeys)){
-        $election_id=$query_electionKeys[0]['election_id'];
-        $email=$query_electionKeys[0]['email'];
-        $query_electionDetails=($crud->getData("SELECT * FROM election_details WHERE election_id='$election_id'"));
-        if(!empty($query_electionDetails)){
-            $election_name=$query_electionDetails[0]['election_name'];
-            $institute=$query_electionDetails[0]['institute'];
-        }
-    }
+    $pin = new Pin($pin_value);
+    $user_controller = new UserController($pin);
+    $index_view = new IndexView($user_controller, $pin);
+    $response = $index_view->signupModalDetailSetting();
+    $election_name = $response->getElectionName();
+    $institute = $response->getInstitute();
+    $email = $response->getEmail();
+    
 }
 ?>
 
@@ -50,7 +52,7 @@ if(isset($_POST['pin_value'])){
 </div>
 <div class="form-group">
     <label for="email">Telephone Number:</label>
-    <input type="email" class="form-control" id="signup_telephone">
+    <input type="text" class="form-control" id="signup_telephone">
 </div>
 <div class="form-group">
     <label for="pwd">Password:</label>

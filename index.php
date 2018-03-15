@@ -1,8 +1,5 @@
 <?php
-include_once("php/crud.php");
 session_start();
-// include ('php/index_be.php');
-$crud=new crud();
 ?>
 
 <!DOCTYPE html>
@@ -45,10 +42,7 @@ $crud=new crud();
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link" style="font-size:15px" data-toggle="modal" data-target="#modalSignIn">SIGN IN AS VOTER</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="modal" data-target="#modalSignIn" style="font-size:15px">SIGN IN AS ADMIN</a>
+              <a class="nav-link" style="font-size:15px" data-toggle="modal" data-target="#modalSignIn">SIGN IN</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" data-toggle="modal" data-target="#modalHelp" style="font-size:15px">GUIDELINES</a>
@@ -131,7 +125,7 @@ $crud=new crud();
               </div>
               <!-- Modal footer -->
               <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" id="signupModal_submitButton" style="float:right;">Submit</button>  
+                <button type="button" class="btn btn-primary" id="signupModal_submitButton" style="float:right;">Submit</button>  
                 <button type="button" class="btn btn-secondary" id="close_button" data-dismiss="modal">Close</button>
               </div>
             </form>
@@ -153,11 +147,11 @@ $crud=new crud();
                 <form action="/action_page.php">
                   <div class="form-group">
                     <label for="email">Email address:</label>
-                    <input type="email" class="form-control" id="email">
+                    <input type="email" class="form-control" id="signin_email">
                   </div>
                   <div class="form-group">
                     <label for="pwd">Password:</label>
-                    <input type="password" class="form-control" id="pwd">
+                    <input type="password" class="form-control" id="signin_password">
                   </div>
                   <div class="form-check text-center">
                     <label class="form-check-label">
@@ -168,7 +162,7 @@ $crud=new crud();
             </div>
             <!-- Modal footer -->
             <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="button" class="btn btn-primary" id="signinModal_submitButton">Submit</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
           </div>
@@ -198,10 +192,11 @@ $crud=new crud();
               method: "POST",
               data: {pin_value: pin_value},
               success: function(data){
-                if(data=='1'){
+                //console.log(data);
+                if(data == 1){
                   $("#modalSignUp").modal("toggle");
                   $('#pin_value').val('');
-                }else if(data == '2'){
+                }else if(data == 2){
                   JSalert_key_used();
                   $('#pin_value').val('');
                 }else{
@@ -225,24 +220,60 @@ $crud=new crud();
           var confirm_password = $('#signup_confirm_password').val();
           console.log(firstname +" "+ lastname+" "+email+" "+telephone+" "+password+" "+confirm_password);
           console.log(password == confirm_password);
-          if(password == confirm_password){
-            $.ajax({
-                url: "php/index/index_be.php",
-                method: "POST",
-                data: {firstname:firstname, lastname:lastname, email:email, telephone:telephone, password:password},
-                success: function(data){
-                  if(data == 'true'){
-                    //JSalert_useradding_success();
-                    $("#modalSignUp").modal("toggle");
-                    window.location.href = "http://localhost/letsvote/voter_home.php";
-                  }else{
-                    alert('failed');
+          if(firstname!='' && lastname!='' && email!='' && telephone!='' && password!='' && confirm_password!=''){
+            if(password == confirm_password){
+              $.ajax({
+                  url: "php/index/index_be.php",
+                  method: "POST",
+                  data: {firstname:firstname, lastname:lastname, email:email, telephone:telephone, password:password},
+                  success: function(data){
+                    console.log(data);
+                    if(data == 1){
+                      //JSalert_useradding_success();
+                      $("#modalSignUp").modal("toggle");
+                      window.location.href = "http://localhost/letsvote/voter_home.php";
+                    }else{
+                      alert('user registration failed');
+                    }
                   }
-                }
+              });
+            }else{
+              alert('passwords do not match');
+            }
+          }else{
+            alert('fill in all the fields')
+          }
+        });
+
+        $('#signinModal_submitButton').click(function(){
+          var email = $('#signin_email').val();
+          var password = $('#signin_password').val();
+          if(email!='' && password!=''){
+            console.log(email+' '+password);
+            $.ajax({
+                  url: "php/index/index_be.php",
+                  method: "POST",
+                  data: {signin_email:email, signin_password:password},
+                  success: function(data){
+                    console.log(data);
+                    if(data == 1){
+                      //$("#modalSignIn").modal("toggle");
+                      $('#signin_email').val('');
+                      $('#signin_password').val('');
+                      window.location.href = "http://localhost/letsvote/voter_home.php";
+                    }else if(data == 2){
+                      $('#signin_email').val('');
+                      $('#signin_password').val('');
+                      window.location.href = "http://localhost/letsvote/admin_home.php";
+                    }else{
+                      alert('Invalid username or password. Try again!')
+                    }
+                  }
             });
           }else{
-            alert('passwords do not match!');
+            alert('Fill in all the fields');
           }
+
         });
 
       ///////////modal-data-passing//////////////////////////////////////
@@ -276,7 +307,7 @@ $crud=new crud();
       function JSalert_key_used(){
         swal({
           title: "EXPIRED KEY", 
-          text: "This key is already used",
+          text: "This key has been already used",
           icon: "error",
           dangerMode: true,
           button: "Try Again",
@@ -285,7 +316,7 @@ $crud=new crud();
       function JSalert_empty_input(){
         swal({
           title: "INSERT KEY", 
-          text: "Enter the pin value we have sent to you",
+          text: "Enter the pin value that we have sent to you",
           icon: "info",
           dangerMode: true,          
           button: "Try Again",

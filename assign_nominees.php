@@ -1,3 +1,7 @@
+<?php
+require 'php/admin_home_be.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,7 +39,7 @@
         <!-- Navbar text-->
         <div class="row">
           <div class="col-sm-9" style="padding:0px 0px;">
-            <span class="navbar-text text-white">Yasiru Samarasekara</span>
+            <span class="navbar-text text-white"><?php echo $fullname; ?></span>
           </div>
           <div class="col-sm-3" style="padding:0px 5px;">
             <span class="badge badge-info text-white" style="height:40px; padding:12px 20px; font-size:15px;">Admin</span>

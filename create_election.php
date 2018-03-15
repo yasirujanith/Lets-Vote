@@ -1,3 +1,7 @@
+<?php
+require 'php/admin_home_be.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,7 +39,7 @@
         <!-- Navbar text-->
         <div class="row">
           <div class="col-sm-9" style="padding:0px 0px;">
-            <span class="navbar-text text-white">Yasiru Samarasekara</span>
+            <span class="navbar-text text-white"><?php echo $fullname; ?></span>
           </div>
           <div class="col-sm-3" style="padding:0px 5px;">
             <span class="badge badge-info text-white" style="height:40px; padding:12px 20px; font-size:15px;">Admin</span>
@@ -69,7 +73,7 @@
         <div class="col-sm-3">
           <div class="form-group">
             <label for="election_name">Committee Count :</label>
-            <input type="number" class="form-control" id="parties_count">
+            <input type="number" class="form-control" id="committee_count">
           </div>
         </div>
         <div class="col-sm-3">
@@ -94,13 +98,14 @@
       </div>
       <hr class="light mb-5">
       <div class="text-center">
-        <a class="btn btn-primary btn-xl" data-toggle="modal" data-target="#partyModal">Register Parties / Committees</a>
+        <a class="btn btn-primary btn-xl" id="registerButton" >Register Parties / Committees</a>
+        <!-- data-toggle="modal" data-target="#partyModal" -->
       </div>
     </div>
 
 
     <!-- party model -->
-    <div class="modal fade" id="partyModal">
+    <div class="modal fade" id="modalCommittee">
     <div class="modal-dialog">
       <div class="modal-content">
         <!-- Modal Header -->
@@ -111,53 +116,124 @@
         <!-- Modal body -->
         <div class="modal-body">
           <form action="/action_page.php">
-            <div class="form-group">
-              <div class="container">
-                <div class="row">
-                  <div class="col-sm-9"><input type="text" placeholder="committee / party name" class="form-control" id="party_name"></div>
-                  <div class="col-sm-3"><input type="number" placeholder="count" class="form-control" id="party_count"></div>
-                </div>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="container">
-                <div class="row">
-                  <div class="col-sm-9"><input type="text" placeholder="committee / party name" class="form-control" id="party_name"></div>
-                  <div class="col-sm-3"><input type="number" placeholder="count" class="form-control" id="party_count"></div>
-                </div>
-              </div>
-            </div>
-            <div class="form-group">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm-9"><input type="text" placeholder="committee / party name" class="form-control" id="party_name"></div>
-                    <div class="col-sm-3"><input type="number" placeholder="count" class="form-control" id="party_count"></div>
-                  </div>
-                </div>
-            </div>                  
+            <div class="modal-body edit-content">
+                  
+            </div>            
           </form>
         </div>
         <!-- Modal footer -->
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary js-scroll-trigger" href="#about">Submit</button>
+          <button type="submit" class="btn btn-primary js-scroll-trigger" id="btn_submit">Submit</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
   </div>
     
-    <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Plugin JavaScript -->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-    <script src="vendor/scrollreveal/scrollreveal.min.js"></script>
-    <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+  <!-- Plugin JavaScript -->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="vendor/scrollreveal/scrollreveal.min.js"></script>
+  <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
 
-    <!-- Custom scripts for this template -->
-    <script src="js/creative.min.js"></script>
+  <!-- Custom scripts for this template -->
+  <script src="js/creative.min.js"></script>
 
+  <script>
+    $(document).ready(function(){
+      $('#registerButton').click(function(){
+        var electionName = document.getElementById("election_name").value;
+        var instituteName = document.getElementById("institute_name").value;
+        var committeeCount = document.getElementById("committee_count").value;
+        var date = document.getElementById("date").value;
+        var start_time = document.getElementById("start_time").value;
+        var end_time = document.getElementById("end_time").value;
+        // console.log(electionName);
+        // console.log(instituteName);
+        // console.log(committeeCount);
+        // console.log(date);
+        // console.log(start_time);
+        // console.log(end_time);
+        if(electionName != '' && instituteName != '' && committeeCount != '' && date != '' && start_time != '' && end_time != ''){
+          console.log('start');
+          $.ajax({
+            url: "php/create_election_be.php",
+            method: "POST",
+            data: {electionName: electionName, instituteName: instituteName, committeeCount: committeeCount, date: date, start_time: start_time, end_time: end_time},
+            success: function(data){
+              console.log(data);
+              if(data == 1){
+                $("#modalCommittee").modal("toggle");
+              }else{
+                alert('There must have been some error. Try again shortly.')
+              }
+            }
+          });
+        }else{
+          alert('filling in all data required is mandatory');
+        }
+      });
+
+      ///////////modal-data-passing//////////////////////////////////////
+      $('#modalCommittee').on('show.bs.modal', function(e) {
+        var $modal = $(this);
+        var committeeCount = document.getElementById("committee_count").value;
+        console.log(committeeCount);
+        $.ajax({
+          cache: false,
+          method: 'POST',
+          url: 'php/committeeCount_modalBody.php',
+          data: {committeeCount : committeeCount},
+          success: function(data) {
+              $modal.find('.edit-content').html(data);
+          }
+        });
+      });
+      ////////////////////////////////////////////////////////////////////
+
+      $('#btn_submit').click(function(){
+        var committeeCount = document.getElementById("committee_count").value;
+        var isSuccess = true;
+        var isFilled = true;
+        for(var i=0; i<committeeCount; i++){
+          committeeName = $('#committee_name'+i).val();
+          candidateCount = $('#count'+i).val();
+          if(committeeName == '' || candidateCount == ''){
+            isFilled = false;
+          }  
+        }
+        if(isFilled == true){
+          for(var i=0; i<committeeCount; i++){
+            committeeName = $('#committee_name'+i).val();
+            candidateCount = $('#count'+i).val();
+            console.log(committeeName+": "+candidateCount);
+            $.ajax({
+              url: "php/create_election_be.php",
+              method: "POST",
+              data: {committeeName:committeeName, candidateCount:candidateCount},
+              success: function(data){
+                console.log(data);
+                if(data == 0){
+                  isSuccess = false;
+                }
+              }
+            });
+          }
+          if(isSuccess == true){
+            window.location.href = "http://localhost/letsvote/assign_nominees.php";
+          }else{
+            window.location.href = "http://localhost/letsvote/create_election.php";
+          }
+        }else{
+          alert('fill all the committee details')
+        }
+      });
+
+    });
+  </script>
 
   </body>
 

@@ -94,6 +94,9 @@
           <div class="col-lg-10 mx-auto text-uppercase">
             <canvas id="myChart"></canvas>
           </div>
+          <div class="col-lg-10 mx-auto text-uppercase">
+            <canvas id="myChart"></canvas>
+          </div>
         </div>
       </div>
     </section>
@@ -106,15 +109,14 @@
                   <h2 class="text-uppercase" style="font-size:2rem; font-weight:300;">               
                       <br><strong>committee 02 - statistical report</strong>
                   </h2>
-                <hr class="mb-3">
+                <hr class="mb-5">
               </div>
           </div>
-          <div class="col-lg-11 mx-auto text-uppercase">
-            <p class="text-faded mb-2" style="font-size:25px; font-weight:300;"><strong>time allocated for your election is now over</strong></p>
-            <p class="text-faded mb-5" style="font-size:25px; font-weight:300;"><strong>Now you can view the <span class="header_highlight">statistics</span> of the  GENERAL ELECTION - 2018</strong></p>
-            <form>
-              <a class="btn btn-primary btn-xl" style="font-size:20px; font-weight:600;">let's proceed</a>
-            </form>
+          <div class="col-lg-10 mx-auto text-uppercase">
+            <canvas id="myChart"></canvas>
+          </div>
+          <div class="col-lg-10 mx-auto text-uppercase">
+            <canvas id="myChart"></canvas>
           </div>
         </div>
       </div>
@@ -124,20 +126,24 @@
       <div class="container my-auto">
         <div class="row">
           <div class="col-lg-12 mx-auto">
-              <div class="col-lg-10 mx-auto">
-                  <h2 class="text-uppercase" style="font-size:2rem; font-weight:300;">               
-                      <br><strong>committee 03 - statistical report</strong>
-                  </h2>
-                <hr class="mb-3">
-              </div>
-          </div>
-          <div class="col-lg-11 mx-auto text-uppercase">
-            <p class="text-faded mb-2" style="font-size:25px; font-weight:300;"><strong>time allocated for your election is now over</strong></p>
-            <p class="text-faded mb-5" style="font-size:25px; font-weight:300;"><strong>Now you can view the <span class="header_highlight">statistics</span> of the  GENERAL ELECTION - 2018</strong></p>
-            <form>
-              <a class="btn btn-primary btn-xl" style="font-size:20px; font-weight:600;">let's proceed</a>
-            </form>
-          </div>
+            <div class="col-lg-10 mx-auto">
+              <h2 class="text-uppercase" style="font-size:2rem; font-weight:300;">               
+                  <br><strong>committee 03 - statistical report</strong>
+              </h2>
+              <hr class="mb-3">
+            </div>
+            <div class="col-lg-10 mx-auto text-uppercase">
+              <canvas id="myChart"></canvas>
+            </div>
+            <div class="col-lg-10 mx-auto text-uppercase">
+              <canvas id="myChart"></canvas>
+            </div>
+            <div class="col-lg-10 mx-auto text-uppercase">
+              <canvas id="myChart"></canvas>
+            </div>
+            <div class="col-lg-10 mx-auto text-uppercase">
+              <canvas id="myChart"></canvas>
+            </div>
         </div>
       </div>
     </section>

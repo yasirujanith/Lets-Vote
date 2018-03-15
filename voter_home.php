@@ -1,6 +1,9 @@
+<?php
+require 'php/voter_home_be.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
 
     <meta charset="utf-8">
@@ -35,7 +38,7 @@
         <!-- Navbar text-->
         <div class="row">
           <div class="col-sm-9" style="padding:0px 0px;">
-            <span class="navbar-text text-white">Yasiru Samarasekara</span>
+            <span class="navbar-text text-white"><?php echo $fullname; ?></span>
           </div>
           <div class="col-sm-3" style="padding:0px 5px;">
             <span class="badge badge-info text-white" style="height:40px; padding:12px 20px; font-size:15px;">Voter</span>
@@ -48,24 +51,24 @@
         <div class="row">
           <div class="col-lg-10 mx-auto">
               <h2 class="text-uppercase" style="font-size:2.1rem; font-weight:300;">               
-                  <br><strong>University of Moratuwa</strong>
+                  <br><strong><?php echo $institute; ?></strong>
               </h2>
             <h1 class="text-uppercase" style="font-size:3.7rem; font-weight:500;">
-              <strong>General Election-2018</strong>
+              <strong><?php echo $election_name; ?></strong>
             </h1>
             <hr class="mb-5">
           </div>
           <div class="col-lg-8 mx-auto">
             <p class="text-faded mb-2" style="font-size:1.6rem; font-weight:380;"><strong>Now you can use your <span class="header_highlight">vote</span> </strong></p>
             <p class="text-faded mb-5" style="font-size:1.6rem; font-weight:380;"><strong><span class="header_highlight">Analytics</span> won't be available until the election is over</strong></p>
-            <form class="">
+            <form>
               <div class="container" style="width:400px">
                 <div class="row">
                   <div class="col-sm-6">
-                    <a class="btn btn-vote btn-xl" style="width:190px;">VOTE NOW</a>
+                    <a class="btn btn-vote btn-xl" style="width:190px;" id='btn_vote'>VOTE NOW</a>
                   </div>
                   <div class="col-sm-6">
-                    <button class="btn btn-primary btn-xl" id="btn_analytics">GET ANALYTICS</button>
+                    <a class="btn btn-primary btn-xl" id="btn_analytics">GET ANALYTICS</a>
                   </div>
                 </div>
               </div>
@@ -87,6 +90,15 @@
     <!-- Custom scripts for this template -->
     <script src="js/creative.min.js"></script>
 
+    <script>
+      $('#btn_vote').click(function(){
+        window.location.href = "http://localhost/letsvote/vote_process.php";
+      });
+      $('#btn_analytics').click(function(){
+        //console.log('hello');
+        window.location.href = "http://localhost/letsvote/get_analytics.php";
+      });
+    </script>
   </body>
 
 </html>

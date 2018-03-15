@@ -1,3 +1,7 @@
+<?php
+require 'php/admin_home_be.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,7 +39,7 @@
         <!-- Navbar text-->
         <div class="row">
           <div class="col-sm-9" style="padding:0px 0px;">
-            <span class="navbar-text text-white">Yasiru Samarasekara</span>
+            <span class="navbar-text text-white"><?php echo $fullname; ?></span>
           </div>
           <div class="col-sm-3" style="padding:0px 5px;">
             <span class="badge badge-info text-white" style="height:40px; padding:12px 20px; font-size:15px;">Admin</span>
@@ -56,14 +60,14 @@
             <p class="text-faded mb-1" style="font-size:1.55rem; font-weight:380;"><strong>Your <span class="header_highlight">administrative account</span> has been created successfully</strong></p>
             <p class="text-faded mb-4" style="font-size:1.55rem; font-weight:380;"><strong>Now you can <span class="header_highlight">create</span> your own <span class="header_highlight">election</span></strong></p>
             <p class="text-faded mb-5" style="font-size:1.45rem; font-weight:380;"><strong><span class="header_highlight">Analytics</span> won't be available until the end of the election</strong></p>
-            <form class="">
+            <form>
               <div class="container" style="width:400px">
                 <div class="row">
                   <div class="col-sm-6">
-                    <a class="btn btn-vote btn-xl" style="width:180px">CREATE NOW</a>
+                    <a class="btn btn-vote btn-xl" style="width:180px" id="btn_createElection">CREATE NOW</a>
                   </div>
                   <div class="col-sm-6">
-                    <button class="btn btn-primary btn-xl" id="btn_analytics">GET ANALYTICS</button>
+                    <a class="btn btn-primary btn-xl" id="btn_getAnalytics">GET ANALYTICS</a>
                   </div>
                 </div>
               </div>
@@ -84,6 +88,16 @@
 
     <!-- Custom scripts for this template -->
     <script src="js/creative.min.js"></script>
+
+    <script>
+      $('#btn_createElection').click(function(){
+        window.location.href = "http://localhost/letsvote/create_election.php";
+      });
+      $('#btn_getAnalytics').click(function(){
+        //console.log('hello');
+        window.location.href = "http://localhost/letsvote/get_analytics.php";
+      });
+    </script>
 
   </body>
 
