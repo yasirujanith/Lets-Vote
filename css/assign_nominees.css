@@ -291,5 +291,12 @@ header.masthead {
   .btn-vote:active, .btn-vote:focus {
     box-shadow: 0 0 0 0.2rem rgb(211, 0, 0) !important; }
 
-
+.btn-nominee {
+  background-color: rgba(207, 0, 0, 0.692);
+  border-color: rgba(207, 0, 0, 0.692) }
+  .btn-vote:hover, .btn-vote:focus, .btn-vote:active {
+    color: #fff;
+    background-color: rgba(207, 0, 0, 0.966) !important; }
+  .btn-vote:active, .btn-vote:focus {
+    box-shadow: 0 0 0 0.2rem rgba(207, 0, 0, 0.966) !important; }
   

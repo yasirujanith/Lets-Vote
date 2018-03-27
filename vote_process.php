@@ -1,3 +1,7 @@
+<?php
+include_once 'php/vote_process_initials.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,10 +39,10 @@
         <!-- Navbar text-->
         <div class="row">
           <div class="col-sm-9" style="padding:0px 0px;">
-            <span class="navbar-text text-white">Yasiru Samarasekara</span>
+            <span class="navbar-text text-white"><?php echo $fullname; ?></span>
           </div>
           <div class="col-sm-3" style="padding:0px 5px;">
-            <span class="badge badge-info text-white" style="height:40px; padding:12px 20px; font-size:15px;">Admin</span>
+            <span class="badge badge-info text-white" style="height:40px; padding:12px 20px; font-size:15px;">Voter</span>
           </div>
         </div>
       </div>
@@ -52,152 +56,44 @@
     
     <div class="container text-white">
       <div class="row">
-        <div class="col-sm-4">
-          <div class="card mb-4" style="width:350px; height:250px;">
-            <div class="card-body">
-              <h4 class="card-title" style="text-align:center;">Committee 01</h4>
-              <hr class="light">
-              <p class="card-text">Some example text. Some example text.</p>
-            </div>
-            <div class="card-footer mx-auto">
-                <a class="btn btn-primary" data-toggle="modal" data-target="#nomineeModal">start voting</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="card mb-4" style="width:350px; height:250px;">
-            <div class="card-body">
-              <h4 class="card-title" style="text-align:center;">Committee 02</h4>
-              <hr class="light">
-              <p class="card-text">Some example text. Some example text.</p>
-            </div>
-            <div class="card-footer mx-auto">
-                <a class="btn btn-primary">start voting</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="card mb-4" style="width:350px; height:250px;">
-            <div class="card-body">
-              <h4 class="card-title" style="text-align:center;">Committee 03</h4>
-              <hr class="light">
-              <p class="card-text">Some example text. Some example text.</p>
-            </div>
-            <div class="card-footer mx-auto">
-                <a href="#" class="btn btn-primary">start voting</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="card mb-4" style="width:350px; height:250px;">
-            <div class="card-body">
-              <h4 class="card-title" style="text-align:center;">Committee 04</h4>
-              <hr class="light">
-              <p class="card-text">Some example text. Some example text.</p>
-            </div>
-            <div class="card-footer mx-auto">
-                <a href="#" class="btn btn-primary">start voting</a>
-            </div>
-          </div>
-        </div>
+        <?php
+          for($x=0; $x<$count; $x++){
+            $committee_name = $query_committeedetails[$x]['committee_name'];
+            $candidate_count = $query_committeedetails[$x]['candidate_count'];
+            $committee_id = $query_committeedetails[$x]['committee_id'];
+            echo '
+              <div class="col-sm-4">
+                <div class="card mb-4" style="width:350px; height:250px;">
+                  <div class="card-body">
+                    <h4 class="card-title" style="text-align:center;">'.$committee_name.'</h4>
+                    <hr class="light">
+                  ';
+                  if($candidate_count>1){
+                    echo '<p class="card-text text-center">'.$candidate_count.' candidates are competing in this committee</p>';
+                  }else{
+                    echo '<p class="card-text text-center">'.$candidate_count.' candidate is competing in this committee</p>';
+                  }
+                  echo '
+                  </div>
+                  <div class="card-footer mx-auto">
+                      <a class="btn btn-primary" id="voteButton" onClick="gotoNode('.$committee_id.')">start voting</a>
+                  </div>
+                </div>
+              </div>
+              ';
+          }
+        ?>
       </div>
     </div>
 
     <!-- modal to show nominees -->
-    <div class="modal fade" id="nomineeModal">
-        <div class="modal-dialog modal-lg" style="width:1250px;">
-          <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header modal-header-success">
-              <h3 class="modal-title" style="font-weight:600;">Committee 01</h3>
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <!-- Modal body -->
-            <div class="modal-body modal-body-success">
-              <br>
-              <div class="container text-white">
-                <div class="row">
-                  <div class="col-sm-6">
-                    <div class="card mb-4" style="width:350px">
-                      <div class="card-body">
-                        <!-- <h4 class="card-title" style="text-align:center;">Nominee 01</h4> -->
-                        <!-- <hr class="light"> -->
-                        <div class="container">
-                          <form action="/action_page.php">
-                            <div class="form-group">
-                              <div class="container" style="text-align:center;">
-                                  <img src="img/profpics/profpic_yasiru.jpg" class="rounded-circle" alt="Cinque Terre" style="height:170px; width:170px;">
-                              </div>
-                              <hr class="light mb-4">
-                              <input type="text" class="form-control" id="name" value="Yasiru Samarasekara" readonly="true" style="text-align:center;">
-                              <!-- <br> -->
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                      <div class="card-footer mx-auto">
-                          <a class="btn btn-primary">vote now</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="card mb-4" style="width:350px">
-                      <div class="card-body">
-                        <!-- <h4 class="card-title" style="text-align:center;">Nominee 01</h4> -->
-                        <!-- <hr class="light"> -->
-                        <div class="container">
-                          <form action="/action_page.php">
-                            <div class="form-group">
-                              <div class="container" style="text-align:center;">
-                                  <img src="img/profpics/profpic_sathira.jpg" class="rounded-circle" alt="Cinque Terre" style="height:170px; width:170px;">
-                              </div>
-                              <hr class="light mb-4">
-                              <input type="text" class="form-control" id="name" value="Sathira Tennakoon" readonly="true" style="text-align:center;">
-                              <!-- <br> -->
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                      <div class="card-footer mx-auto">
-                          <a class="btn btn-primary btn-x3">vote now</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="card mb-4" style="width:350px">
-                      <div class="card-body">
-                        <!-- <h4 class="card-title" style="text-align:center;">Nominee 01</h4> -->
-                        <!-- <hr class="light"> -->
-                        <div class="container">
-                          <form action="/action_page.php">
-                            <div class="form-group">
-                              <div class="container" style="text-align:center;">
-                                  <img src="img/profpics/profpic_lahiru.jpg" class="rounded-circle" alt="Cinque Terre" style="height:170px; width:170px;">
-                              </div>
-                              <hr class="light mb-4">
-                              <input type="text" class="form-control" id="name" value="Lahiru Sampath" readonly="true" style="text-align:center;">
-                              <!-- <br> -->
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                      <div class="card-footer mx-auto">
-                          <a class="btn btn-primary">vote now</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>  
-            </div>
-            <!-- Modal footer -->
-            <div class="modal-footer modal-footer-success">
-              <button type="button" class="btn btn-primary btn-x1" data-dismiss="modal" style="width:110px; height:40px">Save</button>
-              <button type="button" class="btn btn-secondary btn-x1" data-dismiss="modal" style="width:110px; height:40px">Close</button>
-            </div>
-      
-          </div>
+    <div class="modal fade" id="candidateModal">
+      <div class="modal-dialog modal-lg" style="width:1250px;">
+        <div class="modal-content edit-content">
+          
         </div>
       </div>
+    </div>
     
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -210,6 +106,45 @@
 
     <!-- Custom scripts for this template -->
     <script src="js/creative.min.js"></script>
+
+    <script>
+      var committeeID;
+      var candidateID;
+      function gotoNode(ID){
+        committeeID = ID;
+        //console.log(committeeID);
+        $("#candidateModal").modal("toggle");
+      }
+
+      function selectVoter(ID, card_id, candidateCount){
+        candidateID = ID;
+        console.log(candidateID);
+        for(var x=0; x<candidateCount; x++){
+          var div = document.getElementById('candidateCard'+x);
+          if(x==card_id){
+            div.style.backgroundColor = '#aa0000af';
+          }else{
+            div.style.backgroundColor = '#252223af';
+          }
+        }
+      }
+
+      $(document).ready(function(){
+        $('#candidateModal').on('show.bs.modal', function(e) {
+          var $modal = $(this);
+          console.log(committeeID);
+          $.ajax({
+            cache: false,
+            method: 'POST',
+            url: 'php/voteProcess_modalBody.php',
+            data: {committeeID : committeeID},
+            success: function(data) {
+                $modal.find('.edit-content').html(data);
+            }
+          });
+        });
+      });
+    </script>
 
 
   </body>

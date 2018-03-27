@@ -1,6 +1,6 @@
 <?php
 
-class ElectionKeys {
+class ElectionKey {
     private $election_id;
     private $email;
     private $election_key;
@@ -24,18 +24,12 @@ class ElectionKeys {
         return $this->election_key;
     }
 
+    
     //setters
-    public function setElectionID($election_id){
-        $this->election_id = $election_id;
-    }
-
     public function setEmail($email){
         $this->email = $email;
     }
 
-    public function setElectionKey($election_key){
-        $this->election_key = $election_key;
-    }
 }
 
 ?>

@@ -19,5 +19,33 @@ class ElectionView {
     public function addCommittee(){
         return $this->controller->addCommittee($this->model);
     }
+
+    public function getCandidateCount(){
+        return $this->controller->getCandidateCount($this->model);
+    }
+
+    public function addCandidate(){
+        return $this->controller->addCandidate($this->model);
+    }
+
+    public function deleteCandidate(){
+        return $this->controller->deleteCandidate($this->model);
+    }
+
+    public function getSavedCandidates(){
+        return $this->controller->getSavedCandidates($this->model);
+    }
+
+    public function isKeyExists(){
+        return $this->controller->isKeyExists($this->model);
+    }
+
+    public function addElectionKey(){
+        return $this->controller->addElectionKey($this->model);
+    }
+
+    public function getElection(){
+        return $this->controller->getElection($this->model);
+    }
 }
 ?>

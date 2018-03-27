@@ -106,29 +106,30 @@ require 'php/admin_home_be.php';
 
     <!-- party model -->
     <div class="modal fade" id="modalCommittee">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h5 class="modal-title">Enter Name and Nominee Count for each Party / Committee</h5>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        <!-- Modal body -->
-        <div class="modal-body">
-          <form action="/action_page.php">
-            <div class="modal-body edit-content">
-                  
-            </div>            
-          </form>
-        </div>
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary js-scroll-trigger" id="btn_submit">Submit</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h5 class="modal-title">Enter Name and Nominee Count for each Party / Committee</h5>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <!-- Modal body -->
+          <div class="modal-body">
+            <form action="/action_page.php">
+              <div class="modal-body edit-content">
+                    
+              </div>            
+            </form>
+          </div>
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary js-scroll-trigger" id="btn_submit">Submit</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  
     
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
