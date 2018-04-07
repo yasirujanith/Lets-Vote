@@ -150,5 +150,48 @@ class ElectionController {
             return 'false';
         }
     }
+
+    public function isVoted($model){
+        $candidate_id = $model->getCandidateID();
+        $user_id = $model->getUserID();
+        $query_votedetails=($this->crud->getData("SELECT * FROM candidate INNER JOIN vote WHERE vote.candidate_id = candidate.candidate_id AND committee_id = (SELECT committee_id FROM candidate WHERE candidate_id='$candidate_id')"));
+        if(!empty($query_votedetails)){
+            return 'true';
+        }else{
+            return 'false';
+        }
+    }
+
+    public function addVote($model){
+        $candidate_id = $model->getCandidateID();
+        $user_id = $model->getUserID();
+        $query_add_vote=($this->crud->execute("INSERT INTO vote(candidate_id, user_id) VALUES('$candidate_id','$user_id')"));
+        if($query_add_vote==true){
+            return 'true';
+        }else{
+            return 'false';
+        }
+    }
+
+    public function updateVote($model){
+        $candidate_id = $model->getCandidateID();
+        $user_id = $model->getUserID();
+        $query_update_vote=($this->crud->execute("UPDATE vote SET candidate_id = '$candidate_id' WHERE user_id = '$user_id'"));
+        if($query_update_vote==true){
+            return 'true';
+        }else{
+            return 'false';
+        }
+    }
+
+    public function getSelectedCandidateID($model){
+        $committee_id = $model->getPin();
+        $query_candidateid=($this->crud->getData("SELECT * FROM candidate INNER JOIN vote WHERE candidate.candidate_id = vote.candidate_id AND committee_id = '$committee_id'"));
+        if(!empty($query_candidateid)){
+            return $query_candidateid[0]['candidate_id'];
+        }else{
+            return 'empty';
+        }
+    }
 }   
 ?>

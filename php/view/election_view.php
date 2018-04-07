@@ -47,5 +47,21 @@ class ElectionView {
     public function getElection(){
         return $this->controller->getElection($this->model);
     }
+
+    public function isVoted(){
+        return $this->controller->isVoted($this->model);
+    }
+
+    public function addVote(){
+        return $this->controller->addVote($this->model);
+    }
+
+    public function updateVote(){
+        return $this->controller->updateVote($this->model);
+    }
+    
+    public function getSelectedCandidateID(){
+        return $this->controller->getSelectedCandidateID($this->model);
+    }
 }
 ?>

@@ -61,26 +61,53 @@ include_once 'php/vote_process_initials.php';
             $committee_name = $query_committeedetails[$x]['committee_name'];
             $candidate_count = $query_committeedetails[$x]['candidate_count'];
             $committee_id = $query_committeedetails[$x]['committee_id'];
-            echo '
-              <div class="col-sm-4">
-                <div class="card mb-4" style="width:350px; height:250px;">
-                  <div class="card-body">
-                    <h4 class="card-title" style="text-align:center;">'.$committee_name.'</h4>
-                    <hr class="light">
-                  ';
-                  if($candidate_count>1){
-                    echo '<p class="card-text text-center">'.$candidate_count.' candidates are competing in this committee</p>';
-                  }else{
-                    echo '<p class="card-text text-center">'.$candidate_count.' candidate is competing in this committee</p>';
-                  }
-                  echo '
-                  </div>
-                  <div class="card-footer mx-auto">
-                      <a class="btn btn-primary" id="voteButton" onClick="gotoNode('.$committee_id.')">start voting</a>
+
+            //checking whether the committee voting has completed
+            $query_isdone=($crud->getData("SELECT * FROM candidate INNER JOIN vote WHERE candidate.candidate_id = vote.candidate_id AND committee_id = '$committee_id'"));
+            if(!empty($query_isdone)){
+              echo '
+                <div class="col-sm-4">
+                  <div class="card mb-4" style="width:350px; height:250px;">
+                    <div class="card-body">
+                      <h4 class="card-title" style="text-align:center;">'.$committee_name.'</h4>
+                      <hr class="light">
+                    ';
+                    if($candidate_count>1){
+                      echo '<p class="card-text text-center">'.$candidate_count.' candidates are competing in this committee</p>';
+                    }else{
+                      echo '<p class="card-text text-center">'.$candidate_count.' candidate is competing in this committee</p>';
+                    }
+                    echo '<p class="card-text text-center" style="font-size:15px"><strong><span class="header_highlight">ALREADY VOTED</span></strong></p>';
+                    echo '
+                    </div>
+                    <div class="card-footer mx-auto">
+                        <a class="btn btn-primary" id="voteButton" onClick="gotoNode('.$committee_id.')">change vote</a>
+                    </div>
                   </div>
                 </div>
-              </div>
-              ';
+              ';   
+            }else{
+              echo '
+                <div class="col-sm-4">
+                  <div class="card mb-4" style="width:350px; height:250px;">
+                    <div class="card-body">
+                      <h4 class="card-title" style="text-align:center;">'.$committee_name.'</h4>
+                      <hr class="light">
+                    ';
+                    if($candidate_count>1){
+                      echo '<p class="card-text text-center">'.$candidate_count.' candidates are competing in this committee</p>';
+                    }else{
+                      echo '<p class="card-text text-center">'.$candidate_count.' candidate is competing in this committee</p>';
+                    }
+                    echo '
+                    </div>
+                    <div class="card-footer mx-auto">
+                        <a class="btn btn-primary" id="voteButton" onClick="gotoNode('.$committee_id.')">start voting</a>
+                    </div>
+                  </div>
+                </div>
+              ';    
+            }
           }
         ?>
       </div>
@@ -122,15 +149,33 @@ include_once 'php/vote_process_initials.php';
         for(var x=0; x<candidateCount; x++){
           var div = document.getElementById('candidateCard'+x);
           if(x==card_id){
-            div.style.backgroundColor = '#aa0000af';
+            div.style.backgroundColor = 'rgba(255, 187, 0, 0.534)';
           }else{
             div.style.backgroundColor = '#252223af';
           }
         }
       }
 
+      function saveVoter(){
+        console.log("id: "+candidateID);
+        if(candidateID != null){
+          $.ajax({
+            url: "php/voteProcess_be.php",
+            method: "POST",
+            data: {candidateID: candidateID},
+            success: function(data){
+              console.log(data);
+              $("#candidateModal").modal("toggle");
+            }
+          });
+        }else{
+          alert('select a candidate');
+        }
+      }
+
       $(document).ready(function(){
         $('#candidateModal').on('show.bs.modal', function(e) {
+          //candidateID = null;
           var $modal = $(this);
           console.log(committeeID);
           $.ajax({
