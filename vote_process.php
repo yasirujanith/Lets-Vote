@@ -35,19 +35,32 @@ include_once 'php/vote_process_initials.php';
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
-        <a class="navbar-brand js-scroll-trigger" style="font-size:25px">LETS VOTE</a>
-        <!-- Navbar text-->
-        <div class="row">
-          <div class="col-sm-9" style="padding:0px 0px;">
-            <span class="navbar-text text-white"><?php echo $fullname; ?></span>
+        <div class = "row">
+          <div><a class="navbar-brand js-scroll-trigger" style="font-size:25px">LETS VOTE</a></div>
+          <div>
+            <div style="padding:0px 5px;">
+              <span class="badge badge-info text-white" style="height:40px; padding:12px 20px; font-size:15px;">VOTER</span>
+            </div>
           </div>
-          <div class="col-sm-3" style="padding:0px 5px;">
-            <span class="badge badge-info text-white" style="height:40px; padding:12px 20px; font-size:15px;">Voter</span>
-          </div>
+        </div>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" style="font-size:15px" ><?php echo $fullname; ?></a>
+            </li>
+            <li class="nav-item">
+              <div style="padding:0px 5px;">
+                <a href="http://localhost/letsvote/index.php"><span class="badge badge-warning text-white" style="height:40px; padding:12px 20px; font-size:15px; background-color: rgba(255, 187, 0, 0.820); ">SIGNOUT</span></a>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
     </nav>
-    <header class="text-center text-uppercase text-white">
+    <header class="text-center text-uppercase text-white" style="padding-top: 20px;">
       <h1 style="font-size:45px"><strong>Now Let's<span class="header_highlight"> Vote</span></strong></h1>
       <hr>
       <h3 style="font-size:20px"><strong>Give your vote for a nominee in each committee</strong></h3>
@@ -63,7 +76,7 @@ include_once 'php/vote_process_initials.php';
             $committee_id = $query_committeedetails[$x]['committee_id'];
 
             //checking whether the committee voting has completed
-            $query_isdone=($crud->getData("SELECT * FROM candidate INNER JOIN vote WHERE candidate.candidate_id = vote.candidate_id AND committee_id = '$committee_id'"));
+            $query_isdone=($crud->getData("SELECT * FROM candidate INNER JOIN vote WHERE candidate.candidate_id = vote.candidate_id AND committee_id = '$committee_id' AND user_id='$user_id'"));
             if(!empty($query_isdone)){
               echo '
                 <div class="col-sm-4">
@@ -120,6 +133,10 @@ include_once 'php/vote_process_initials.php';
           
         </div>
       </div>
+    </div>
+    <hr>
+    <div class="text-center text-uppercase">
+      <button class="btn btn-primary" id="homeButton" style="font-size: 18px; height:50px; width: 270px;">proceed to home page</button>
     </div>
     
     <!-- Bootstrap core JavaScript -->
@@ -188,6 +205,10 @@ include_once 'php/vote_process_initials.php';
             }
           });
         });
+      });
+
+      $("#homeButton").click(function(){
+        window.location.href = "http://localhost/letsvote/voter_home.php";
       });
     </script>
 

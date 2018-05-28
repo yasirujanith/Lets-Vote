@@ -33,7 +33,6 @@ body {
 .modal-body-success {
   color:#fff;
   padding:9px 15px;
-  /* border-bottom:2px solid rgba(255, 187, 0, 0.774); */
   background-color: #000000a8;
   -webkit-border-top-left-radius: 5px;
   -webkit-border-top-right-radius: 5px;
@@ -55,6 +54,44 @@ body {
    border-top-right-radius: 5px;
 }
 
+.modalemail-header-success {
+  color:rgba(255, 187, 0, 0.774);
+  padding:12px 15px;
+  border-bottom:2px #000000cc;
+  background-color: #000000cc;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+   border-top-left-radius: 5px;
+   border-top-right-radius: 5px;
+}
+
+.modalemail-body-success {
+  color:#fff;
+  padding:9px 15px;
+  /* border-bottom:2px solid rgba(255, 187, 0, 0.774); */
+  background-color: #00000050;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+   border-top-left-radius: 5px;
+   border-top-right-radius: 5px;
+}
+
+.modalemail-footer-success {
+  color:#fff;
+  padding:15px 15px;
+  background-color: #0000009c;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+   border-top-left-radius: 5px;
+   border-top-right-radius: 5px;
+}
+
 
  .card {
   background-color: #222425c7;
@@ -62,6 +99,7 @@ body {
   background-position: center center;
   background-size: cover;
  }
+ 
  .modal-nominee-assign {
   background-image: url("../img/nominee_assign_modal.jpg");
  }

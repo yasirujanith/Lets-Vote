@@ -17,10 +17,41 @@ body {
   padding-top: 4.5rem;
   }
 
+.card {
+  background-color: #25222342;
+  background-attachment: fixed;
+  background-position: center center;
+  background-size: cover;
+}
+
 hr {
-  max-width: 250px;
+  /* max-width: 250px; */
   border-width: 2px;
   border-color: rgba(255, 187, 0, 0.774); }
+
+.progress {
+  height: 25px;
+  background-color: rgba(24, 23, 22, 0.308);
+}
+.progress .skill {
+  font: normal 12px;
+  line-height: 35px;
+  padding: 0;
+  margin: 0 0 0 20px;
+  /* text-transform: uppercase; */
+}
+.progress .skill .val {
+  float: right;
+  font-style: normal;
+  margin: 0 20px 0 0;
+}
+
+.progress-bar {
+  text-align: left;
+  transition-duration: 3s;
+  background-color: rgba(255, 187, 0, 0.774);
+}
+
 
 
 a {
@@ -135,7 +166,7 @@ body {
             color:  rgba(255, 187, 0, 0.774); }
         #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link,
         #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus {
-          color: #212529; }
+          color: #606264b0; }
           #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:hover,
           #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus:hover {
             color:  rgba(255, 187, 0, 0.774); } }

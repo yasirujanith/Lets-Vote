@@ -41,6 +41,23 @@ if(isset($_POST['firstname'])){
     }
 }
 
+if(isset($_POST['firstnameDup1'])){
+    $firstname=$_POST['firstnameDup1'];
+    $lastname=$_POST['lastname'];
+    $email=$_POST['email'];
+    $telephone=$_POST['telephone'];
+    $password=$_POST['password'];
+    $user_details = new UserDetails(null, 'null', $firstname, $lastname, $email, $telephone, $password, 'true');
+    $user_controller = new UserController($user_details);
+    $index_view = new IndexView($user_controller, $user_details);
+    $response = $index_view->insertAdminDetails();
+    if($response == 'true'){
+        echo '1';
+    }else{
+        echo '2';
+    }
+}
+
 if(isset($_POST['signin_email'])){
     $email=$_POST['signin_email'];
     $password=$_POST['signin_password'];

@@ -51,9 +51,9 @@ require 'php/admin_home_be.php';
             </li>
           </ul>
         </div>
-
       </div>
     </nav>
+
     <header class="text-center text-uppercase text-white">
       <h1 style="font-size:45px"><strong>Let's Create a <span class="header_highlight">New election</span></strong></h1>
       <hr>
@@ -80,13 +80,13 @@ require 'php/admin_home_be.php';
         <div class="col-sm-3">
           <div class="form-group">
             <label for="election_name">Committee Count :</label>
-            <input type="number" class="form-control" id="committee_count" min="1">
+            <input type="number" class="form-control" id="committee_count">
           </div>
         </div>
         <div class="col-sm-3">
           <div class="form-group">
             <label for="date">Commencing Date :</label>
-            <input type="date" class="form-control" id="date" min="<?php echo date('Y-m-d'); ?>">
+            <input type="date" class="form-control" id="date">
           </div>
         </div>
         <div class="col-sm-3">
@@ -151,7 +151,31 @@ require 'php/admin_home_be.php';
   <script src="js/creative.min.js"></script>
 
   <script>
-    var isElectionAdded = false;
+    // Adding initial details
+    var electionID = localStorage.getItem("electionID");
+    var former_committee_count;
+    var post_committee_count;
+    var committees = [];
+    var candidate_count = [];
+    console.log(electionID);
+    $.ajax({
+        url: "php/update_election_be.php",
+        method: "POST",
+        data: {electionID: electionID},
+        dataType: "json",
+        success: function(data){
+            console.log(data);
+            former_committee_count = data[2];
+            document.getElementById("election_name").value = data[0];
+            document.getElementById("institute_name").value = data[1];
+            document.getElementById("committee_count").value = data[2];
+            document.getElementById("date").value = data[3];
+            document.getElementById("start_time").value = data[4];
+            document.getElementById("end_time").value = data[5];
+        }
+    });
+
+    // updating procedure
     $(document).ready(function(){
       $('#registerButton').click(function(){
         var electionName = document.getElementById("election_name").value;
@@ -160,63 +184,49 @@ require 'php/admin_home_be.php';
         var date = document.getElementById("date").value;
         var start_time = document.getElementById("start_time").value;
         var end_time = document.getElementById("end_time").value;
-
-        var start_date = new Date(date);
-        var current_date = new Date();
-        var date_difference = (start_date - current_date)/3600000;
-        //console.log(date_difference); 
-
-        var start_datetime = new Date("7/20/2018 " + start_time);
-        var end_datetime = new Date("7/20/2018 " + end_time);
-        var time_difference = (end_datetime-start_datetime)/3600000;
-        //console.log('time : '+(time_difference));
+        post_committee_count = committeeCount;
         // console.log(electionName);
         // console.log(instituteName);
         // console.log(committeeCount);
         // console.log(date);
         // console.log(start_time);
         // console.log(end_time);
-        if(isElectionAdded == false){
-          if(electionName != '' && instituteName != '' && committeeCount != '' && date != '' && start_time != '' && end_time != ''){
-             if(time_difference > 0 && date_difference>=0){ 
-              console.log('start');
-              $.ajax({
-                url: "php/create_election_be.php",
-                method: "POST",
-                data: {electionName: electionName, instituteName: instituteName, committeeCount: committeeCount, date: date, start_time: start_time, end_time: end_time},
-                success: function(data){
-                  console.log(data);
-                  if(data == 1){
-                    isElectionAdded = true;
+        if(electionName != '' && instituteName != '' && committeeCount != '' && date != '' && start_time != '' && end_time != ''){
+          console.log('start');
+          $.ajax({
+            url: "php/update_election_be.php",
+            method: "POST",
+            data: {election_id: electionID, electionName: electionName, instituteName: instituteName, committeeCount: committeeCount, date: date, start_time: start_time, end_time: end_time},
+            success: function(data){
+                console.log(data);
+                if(data == 1){
                     $("#modalCommittee").modal("toggle");
-                  }else{
+                }else{
                     alert('There must have been some error. Try again shortly.')
-                  }
                 }
-              });
-             }else{
-               alert("Invalid Election Period.")
-             }
-          }else{
-            alert('filling in all data required is mandatory');
-          }
+            }
+          });
         }else{
-          $("#modalCommittee").modal("toggle");
+          alert('filling in all data required is mandatory');
         }
       });
 
       ///////////modal-data-passing//////////////////////////////////////
       $('#modalCommittee').on('show.bs.modal', function(e) {
         var $modal = $(this);
-        var committeeCount = document.getElementById("committee_count").value;
-        //console.log(committeeCount);
         $.ajax({
           cache: false,
           method: 'POST',
-          url: 'php/committeeCount_modalBody.php',
-          data: {committeeCount : committeeCount},
+          url: 'php/committeeCount_modalBody_update.php',
+          data: {electionID: electionID, former_committee_count : former_committee_count, post_committee_count: post_committee_count},
           success: function(data) {
               $modal.find('.edit-content').html(data);
+              for(var i=0; i<former_committee_count; i++){
+                committeeName = $('#committee_name'+i).val();
+                candidateCount = $('#count'+i).val();
+                committees.push(committeeName);
+                candidate_count.push(candidateCount);
+              }
           }
         });
       });
@@ -226,41 +236,107 @@ require 'php/admin_home_be.php';
         var committeeCount = document.getElementById("committee_count").value;
         var isSuccess = true;
         var isFilled = true;
-        var promises = [];
-        for(var i=0; i<committeeCount; i++){
+        var beforeCount = former_committee_count;
+        var afterCount = post_committee_count;
+
+        for(var i=0; i<afterCount; i++){
           committeeName = $('#committee_name'+i).val();
           candidateCount = $('#count'+i).val();
           if(committeeName == '' || candidateCount == ''){
             isFilled = false;
           }  
         }
-        if(isFilled == true){
-          for(var i=0; i<committeeCount; i++){
-            committeeName = $('#committee_name'+i).val();
-            candidateCount = $('#count'+i).val();
-            console.log(committeeName+": "+candidateCount);
-            var request = $.ajax({
-              url: "php/create_election_be.php",
-              method: "POST",
-              data: {committeeName:committeeName, candidateCount:candidateCount},
-              success: function(data){
-                console.log(data);
-                if(data == 0){
-                  isSuccess = false;
-                }
-              }
-            });
-            promises.push(request);
-          }
-          $.when.apply(null, promises).done(function(){
-            if(isSuccess == true){
-              window.location.href = "http://localhost/letsvote/assign_nominees.php";
+        if(beforeCount > afterCount){
+            promises = [];
+            console.log('start updating: '+electionID);
+            if(isFilled == true){
+                $.ajax({
+                    url: "php/update_election_be.php",
+                    method: "POST",
+                    data: {electionDup1ID: electionID},
+                    success: function(data){
+                        console.log('delete: '+data);
+                        for(var i=0; i<afterCount; i++){
+                          committeeName = $('#committee_name'+i).val();
+                          candidateCount = $('#count'+i).val();
+                          console.log(committeeName+": "+candidateCount);
+                          var request = $.ajax({
+                            url: "php/update_election_be.php",
+                            method: "POST",
+                            data: {electionDup0ID: electionID, committeeName:committeeName, candidateCount:candidateCount},
+                            success: function(data){
+                                console.log('Adding: '+data);
+                                if(data == 0){
+                                isSuccess = false;
+                                }
+                            }
+                          });
+                          promises.push(request);
+                        }
+                        $.when.apply(null, promises).done(function(){
+                          if(isSuccess == true){
+                            window.location.href = "http://localhost/letsvote/assign_nominees.php";
+                          }else{
+                            window.location.href = "http://localhost/letsvote/create_election.php";
+                          }
+                        });
+                    }
+                });
+                
             }else{
-              window.location.href = "http://localhost/letsvote/create_election.php";
+                alert('fill all the committee details')
             }
-          });
         }else{
-          alert('fill all the committee details')
+            console.log(committees);
+            
+            if(isFilled == true){
+                for(var i=0; i<beforeCount; i++){
+                  committeeNameBefore = committees[i]
+                  candidateCountBefore = candidate_count[i];
+                  committeeName = $('#committee_name'+i).val();
+                  candidateCount = $('#count'+i).val();
+                  console.log(committeeNameBefore+" : "+committeeName+": "+candidateCount);
+                  $.ajax({
+                    url: "php/update_election_be.php",
+                    method: "POST",
+                    data: {electionDup2ID: electionID, committeeNameBefore: committeeNameBefore, candidateCountBefore: candidateCountBefore, committeeNameDup2: committeeName, candidateCount: candidateCount},
+                    success: function(data){
+                        console.log(data);
+                        if(data == 0){
+                          isSuccess = false;
+                        }
+                    }
+                  });
+                }
+
+                promises = [];
+                for(var i=beforeCount; i<afterCount; i++){
+                  committeeName = $('#committee_name'+i).val();
+                  candidateCount = $('#count'+i).val();
+                  console.log(committeeName+": "+candidateCount);
+                  var request = $.ajax({
+                  url: "php/update_election_be.php",
+                  method: "POST",
+                  data: {electionDup0ID: electionID, committeeName: committeeName, candidateCount: candidateCount},
+                  success: function(data){
+                      console.log(data);
+                      if(data == 0){
+                        isSuccess = false;
+                      }
+                  }
+                  });
+                  promises.push(request);
+                }
+                $.when.apply(null, promises).done(function(){
+                  if(isSuccess == true){
+                      window.location.href = "http://localhost/letsvote/update_assign_nominees.php";
+                  }else{
+                      window.location.href = "http://localhost/letsvote/update_election.php";
+                  }
+                });
+            }else{
+                alert('fill all the committee details')
+            }
         }
       });
 

@@ -22,6 +22,17 @@ hr {
   border-width: 2px;
   border-color: rgba(255, 187, 0, 0.774); }
 
+.card {
+  background-color: #252223b2;
+  background-attachment: fixed;
+  background-position: center center;
+  background-size: cover;
+}
+
+.card-previous-elections {
+  background-image: url("../img/nominee_assign_modal.jpg");
+ }
+  
 
 a {
   color: rgba(255, 187, 0, 0.774);
@@ -89,10 +100,10 @@ body {
   #mainNav .navbar-brand {
     font-weight: 700;
     text-transform: uppercase;
-    color: #F05F40;
+    color:  rgba(255, 187, 0, 0.774);
     font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif; }
     #mainNav .navbar-brand:focus, #mainNav .navbar-brand:hover {
-      color: #f05f40; }
+      color: #ffffff; }
   #mainNav .navbar-nav > li.nav-item > a.nav-link,
   #mainNav .navbar-nav > li.nav-item > a.nav-link:focus {
     font-size: .9rem;
@@ -101,10 +112,10 @@ body {
     color: #212529; }
     #mainNav .navbar-nav > li.nav-item > a.nav-link:hover,
     #mainNav .navbar-nav > li.nav-item > a.nav-link:focus:hover {
-      color: #F05F40; }
+      color:  rgba(255, 187, 0, 0.774); }
     #mainNav .navbar-nav > li.nav-item > a.nav-link.active,
     #mainNav .navbar-nav > li.nav-item > a.nav-link:focus.active {
-      color: #F05F40 !important;
+      color:  rgba(255, 187, 0, 0.863) !important;
       background-color: transparent; }
       #mainNav .navbar-nav > li.nav-item > a.nav-link.active:hover,
       #mainNav .navbar-nav > li.nav-item > a.nav-link:focus.active:hover {
@@ -127,17 +138,17 @@ body {
           color: #fff; }
       #mainNav.navbar-shrink {
         border-bottom: 1px solid rgba(33, 37, 41, 0.1);
-        background-color: #fff; }
+        background-color: rgba(0, 0, 0, 0.747); }
         #mainNav.navbar-shrink .navbar-brand {
-          color: #F05F40; }
+          color: rgba(255, 187, 0, 0.774); }
           #mainNav.navbar-shrink .navbar-brand:focus, #mainNav.navbar-shrink .navbar-brand:hover {
-            color: #f05f40; }
+            color:  rgba(255, 187, 0, 0.774); }
         #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link,
         #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus {
-          color: #212529; }
+          color: #606264b0; }
           #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:hover,
           #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus:hover {
-            color: #F05F40; } }
+            color:  rgba(255, 187, 0, 0.774); } }
 
 header.masthead {
   padding-top: 2rem;

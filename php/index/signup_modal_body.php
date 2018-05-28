@@ -39,28 +39,34 @@ if(isset($_POST['pin_value'])){
     <div class="col-sm-6">
         <label for="firstname">First Name:</label>
         <input type="text" class="form-control" id="signup_firstname">
+        <span id="firstname_span" style="color: rgba(211, 0, 0, 0.712); font-size:13px;"></span>
     </div>
     <div class="col-sm-6">
         <label for="lastname">Last Name:</label>
         <input type="text" class="form-control" id="signup_lastname">
+        <span id="lastname_span" style="color: rgba(211, 0, 0, 0.712); font-size:13px;"></span>
     </div>
     </div>
 </div>  
 <div class="form-group">
     <label for="email">Email address:</label>
     <input type="email" class="form-control" id="signup_email" value="<?php echo $email;?>">
+    <span id="email_span" style="color: rgba(211, 0, 0, 0.712); font-size:13px;"></span>
 </div>
 <div class="form-group">
     <label for="email">Telephone Number:</label>
     <input type="text" class="form-control" id="signup_telephone">
+    <span id="telephone_span" style="color: rgba(211, 0, 0, 0.712); font-size:13px;"></span>
 </div>
 <div class="form-group">
     <label for="pwd">Password:</label>
     <input type="password" class="form-control" id="signup_password">
+    <span id="password_span" style="color: rgba(211, 0, 0, 0.712); font-size:13px;"></span>
 </div>
 <div class="form-group">
     <label for="pwd">Confirm Password:</label>
     <input type="password" class="form-control" id="signup_confirm_password">
+    <span id="confirmpassword_span" style="color: rgba(211, 0, 0, 0.712); font-size:13px;"></span>
 </div>
 
    

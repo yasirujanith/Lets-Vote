@@ -1,5 +1,5 @@
 <?php
-include_once 'php/assign_nominees_initials.php';
+include_once 'php/update_nominees_initials.php';
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +42,7 @@ include_once 'php/assign_nominees_initials.php';
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" style="font-size:15px" ><?php echo $fullname; ?></a>
+              <a class="nav-link js-scroll-trigger" href="#'.$committee_id.'" style="font-size:15px" ><?php echo $fullname; ?></a>
             </li>
             <li class="nav-item">
               <div style="padding:0px 5px;">
@@ -53,7 +53,7 @@ include_once 'php/assign_nominees_initials.php';
         </div>
       </div>
     </nav>
-    <header class="text-center text-uppercase text-white" style="padding-top:10px; padding-bottom:10px;">
+    <header class="text-center text-uppercase text-white" style="padding-top: 10px; padding-bottom: 10px;">
       <h1 style="font-size:45px"><strong><span class="header_highlight">Nominee</span> Assignment</strong></h1>
       <hr>
       <h3 style="font-size:20px"><strong>Assign Nominee Details for each party / committee</strong></h3>
@@ -88,13 +88,16 @@ include_once 'php/assign_nominees_initials.php';
       </div>
       <hr class="mb-4">
       <div class="container text-white text-center text-uppercase">
-          <h3 style="font-size:20px"><strong>Voter count for the Election</strong></h3><br>
+        <div class="col-sm-12" style="text-align:center; border: 5px solid #aaa; padding:20px;">
+          <h6>You already have sent voting request for <strong><?php echo $voter_count; ?></strong> people. To send more voter requests enter additional voter details.</h4>
+        </div>
+          <br><h3 style="font-size:20px"><strong>Additional voter count for the Election</strong></h3><br>
           <div class="row">
               <div class="col-sm-5"></div>
               <div class="col-sm-2">
                   <div class="form-group text-uppercase mb-4">
                       <!-- <label for="election_name">VOTER COUNT FOR THE ELECTION</label> -->
-                      <input type="number" class="form-control" id="voter_count" min="1" value="1">
+                      <input type="number" class="form-control" id="voter_count">
                   </div>
               </div>
           </div>
@@ -172,7 +175,6 @@ include_once 'php/assign_nominees_initials.php';
       function addSettings(savedCount, candidateCount){
         var isSuccess = true;
         var promises = [];
-
         for(var i=savedCount; i<candidateCount; i++){   
           formdata = new FormData();      
           var file = document.getElementById('profilePicture'+i).files[0];
@@ -215,7 +217,7 @@ include_once 'php/assign_nominees_initials.php';
           $.ajax({
             cache: false,
             method: 'POST',
-            url: 'php/nomineeModal_body.php',
+            url: 'php/update_nomineeModal_body.php',
             data: {committeeID : committeeID},
             success: function(data) {
                 $modal.find('.edit-content').html(data);
@@ -248,97 +250,51 @@ include_once 'php/assign_nominees_initials.php';
         var promises = [];
         var voterCount = document.getElementById("voter_count").value;
         var isFilled = true;
-        var isValid = true;
         for(var i=0; i<voterCount; i++){
           voterName = $('#voter_name'+i).val();
           email = $('#email'+i).val();
           if(voterName == '' || email == ''){
             isFilled = false;
-          }
-          if(validationFunction(voterName, email, i) == false){
-            isValid = false;
           }  
         }
         //console.log("is filled: "+isFilled);
         if(isFilled == true){
-          if(isValid == true){
-            document.getElementById('alert_span').innerText = "Please Wait...";
-            for(var i=0; i<voterCount; i++){
-              voterName = $('#voter_name'+i).val();
-              email = $('#email'+i).val();
-              //console.log(voterName+": "+email);
-              var request = $.ajax({
-                url: "php/add_voters_be.php",
-                method: "POST",
-                data: {voterName:voterName, email:email},
-                success: function(data){
-                  console.log(data);
-                  if(data != 11){
-                    isSuccess = false;
-                  }
+          for(var i=0; i<voterCount; i++){
+            voterName = $('#voter_name'+i).val();
+            email = $('#email'+i).val();
+            //console.log(voterName+": "+email);
+            var request = $.ajax({
+              url: "php/add_voters_be.php",
+              method: "POST",
+              data: {voterName:voterName, email:email},
+              success: function(data){
+                console.log(data);
+                if(data != 11){
+                  isSuccess = false;
                 }
-              });
-              promises.push(request);
-            }
-            $.when.apply(null, promises).done(function(){
-              if(isSuccess == true){
-                document.getElementById('alert_span').innerText = "";
-                alert("e-mail adding success. you will be now redirected to your Home Page.");
-                $('#modalAddEmails').modal("toggle");
-                window.location.href = "http://localhost/letsvote/admin_home.php";
-              }else{
-                alert('There must have been some error. try again!');
               }
             });
+            promises.push(request);
           }
+          $.when.apply(null, promises).done(function(){
+            if(isSuccess == true){
+              alert("e-mail adding success. You will now be redirected to your Home Page.");
+              $('#modalAddEmails').modal("toggle");
+              window.location.href = "http://localhost/letsvote/admin_home.php";
+
+            }else{
+              alert('There must have been some error. try again!');
+            }
+          });
+
         }else{
           alert('fill all the voter details')
         }
       });
-    });
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // validation
+    
+      });
 
-      function validationFunction(firstname, email, i){
-        var validated = true;
-
-        var firstname_validated = inputAlphabet(firstname);
-        if(firstname_validated == false){
-          validated = false;
-          document.getElementById('firstname_span'+i).innerText = "*invalid name";
-        }else{
-          document.getElementById('firstname_span'+i).innerText = "";
-        }
-
-        var email_validated = emailValidation(email);
-        if(email_validated == false){
-          validated = false;
-          document.getElementById('email_span'+i).innerText = "*invalid e-mail address";
-        }else{
-          document.getElementById('email_span'+i).innerText = "";
-        }
-        return validated;
-      }
-
-      function inputAlphabet(inputtext){  
-        var alphaExp = /^[a-zA-Z]+$/;
-        if(inputtext.match(alphaExp)){
-          return true;
-        }else{
-          return false;
-        }
-      }
-
-
-      function emailValidation(inputtext){
-        var emailExp = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        if(inputtext.match(emailExp)){
-          return true;
-        }else{
-          return false;
-        }
-      }
     </script>
 
   </body>

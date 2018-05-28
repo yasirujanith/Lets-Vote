@@ -16,6 +16,10 @@ class IndexView {
         return $this->controller->insertUserDetails($this->model);
     }
 
+    public function insertAdminDetails(){
+        return $this->controller->insertAdminDetails($this->model);
+    }
+
     public function signIn(){
         return $this->controller->signIn($this->model);
     }

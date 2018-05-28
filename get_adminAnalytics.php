@@ -184,30 +184,30 @@ require 'php/getAnalytics_initials.php';
     <script src="js/creative.min.js"></script>
 
     <script>
-      var committeeID;
-      var candidateID;
-      function getStats(comID, canID){
-        committeeID = comID;
-        candidateID = canID;
-        $("#analyticsModal").modal("toggle");
-      }
+        var committeeID;
+        var candidateID;
+        function getStats(comID, canID){
+            committeeID = comID;
+            candidateID = canID;
+            $("#analyticsModal").modal("toggle");
+        }
 
-      $(document).ready(function(){
-        $('#analyticsModal').on('show.bs.modal', function(e) {
-          var $modal = $(this);
-          console.log(committeeID);
-          console.log(candidateID);
-          $.ajax({
-            cache: false,
-            method: 'POST',
-            url: 'php/analyticsModal_body.php',
-            data: {committeeID : committeeID, candidateID : candidateID },
-            success: function(data) {
-                $modal.find('.edit-content').html(data);
-            }
-          });
+        $(document).ready(function(){
+            $('#analyticsModal').on('show.bs.modal', function(e) {
+                var $modal = $(this);
+                console.log(committeeID);
+                console.log(candidateID);
+                $.ajax({
+                    cache: false,
+                    method: 'POST',
+                    url: 'php/analyticsModal_body.php',
+                    data: {committeeID : committeeID, candidateID : candidateID },
+                    success: function(data) {
+                        $modal.find('.edit-content').html(data);
+                    }
+                });
+            });
         });
-      });
 
     </script>
 

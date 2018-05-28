@@ -10,3 +10,10 @@ if(!empty($query_userdetails)){
   $lastname=$query_userdetails[0]['lastname'];
   $fullname=$firstname." ".$lastname;
 }
+
+$query_electiondetails=($crud->getData("SELECT * FROM election_details WHERE admin_id='$user_id'"));
+$size = sizeof($query_electiondetails);
+
+
+
+ 

@@ -12,6 +12,14 @@ class ElectionView {
         return $this->controller->addElection($this->model);
     }
 
+    public function deleteElection(){
+        return $this->controller->deleteElection($this->model);
+    }
+
+    public function updateElection(){
+        return $this->controller->updateElection($this->model);
+    }
+
     public function getElectionID(){
         return $this->controller->getElectionID($this->model);
     }
@@ -62,6 +70,58 @@ class ElectionView {
     
     public function getSelectedCandidateID(){
         return $this->controller->getSelectedCandidateID($this->model);
+    }
+    
+    public function getCommittees(){
+        return $this->controller->getCommittees($this->model);
+    }
+
+    public function getCommitteeDetails(){
+        return $this->controller->getCommitteeDetails($this->model);
+    }
+    
+    public function getTotalVotes(){
+        return $this->controller->getTotalVotes($this->model);
+    }
+    
+    public function getTotalElectionVotes(){
+        return $this->controller->getTotalElectionVotes($this->model);
+    }
+
+    public function getCandidates(){
+        return $this->controller->getCandidates($this->model);
+    }
+
+    public function getCandidateRank(){
+        return $this->controller->getCandidateRank($this->model);
+    }
+
+    public function getCandidateDetails(){
+        return $this->controller->getCandidateDetails($this->model);
+    }
+
+    public function getVotes(){
+        return $this->controller->getVotes($this->model);
+    }
+
+    public function getElectionDetails(){
+        return $this->controller->getElectionDetails($this->model);
+    }
+
+    public function deleteAllCommittees(){
+        return $this->controller->deleteAllCommittees($this->model);
+    }
+    
+    public function getCommitteeID(){
+        return $this->controller->getCommitteeID($this->model);
+    }
+    
+    public function updateCommittee(){
+        return $this->controller->updateCommittee($this->model);
+    }
+
+    public function deleteCommitteeCandidates(){
+        return $this->controller->deleteCommitteeCandidates($this->model);
     }
 }
 ?>

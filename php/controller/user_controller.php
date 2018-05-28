@@ -54,6 +54,27 @@ class UserController {
         }
     }
 
+    public function insertAdminDetails($model){
+        $election_id = $model->getElectionID();
+        $firstname = $model->getFirstName();
+        $lastname = $model->getLastName();
+        $email = $model->getEmail();
+        $telephone = $model->getTelephone();
+        $password = $model->getPassword();
+
+        $query_add_userdetails=($this->crud->execute("INSERT INTO user_details(election_id, firstname, lastname, email, telephone, password, is_admin) VALUES('$election_id','$firstname','$lastname','$email','$telephone','$password','true')"));
+        if($query_add_userdetails==true){
+            $query_userdetails=($this->crud->getData("SELECT * FROM user_details WHERE email='$email'"));
+            if(!empty($query_userdetails)){
+                $user_id=$query_userdetails[0]['user_id'];
+                $_SESSION['user_id']=$user_id;
+            }
+            return 'true';
+        }else{
+            return 'false';
+        }
+    }
+
     public function signIn($model){
         $email = $model->getSignInEmail();
         $password = $model->getSignInPassword();

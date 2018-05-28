@@ -48,7 +48,7 @@ session_start();
               <a class="nav-link" data-toggle="modal" data-target="#modalHelp" style="font-size:15px">GUIDELINES</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" data-toggle="modal" data-target="#modalHelp" style="font-size:15px">CONTACT US</a>
+              <a class="nav-link" data-toggle="modal" data-target="#modalAdminSignup" style="font-size:15px">CONTACT US</a>
             </li>
           </ul>
         </div>
@@ -132,18 +132,73 @@ session_start();
           </div>
         </div>
       </div>
+      
+      <!-- Admin Registering Modal -->
+      <div class="modal fade" id="modalAdminSignup">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header modal-header-success">
+              <h4 class="modal-title mb-3">REGISTERING NEW ADMIN</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body modal-body-success">
+              <div class="form-group">
+                <div class="row" >
+                  <div class="col-sm-6">
+                      <label for="firstname">First Name:</label>
+                      <input type="text" class="form-control" id="signup_firstname">
+                      <span id="firstname_span" style="color: rgba(211, 0, 0, 0.800); font-size:13px;"></span>
+                  </div>
+                  <div class="col-sm-6">
+                      <label for="lastname">Last Name:</label>
+                      <input type="text" class="form-control" id="signup_lastname">
+                      <span id="lastname_span" style="color: rgba(211, 0, 0, 0.712); font-size:13px;"></span>
+                  </div>
+                </div>
+              </div>  
+              <div class="form-group">
+                  <label for="email">Email address:</label>
+                  <input type="email" class="form-control" id="signup_email">
+                  <span id="email_span" style="color: rgba(211, 0, 0, 0.712); font-size:13px;"></span>
+              </div>
+              <div class="form-group">
+                  <label for="email">Telephone Number:</label>
+                  <input type="text" class="form-control" id="signup_telephone">
+                  <span id="telephone_span" style="color: rgba(211, 0, 0, 0.712); font-size:13px;"></span>
+              </div>
+              <div class="form-group">
+                  <label for="pwd">Password:</label>
+                  <input type="password" class="form-control" id="signup_password">
+                  <span id="password_span" style="color: rgba(211, 0, 0, 0.712); font-size:13px;"></span>
+              </div>
+              <div class="form-group">
+                  <label for="pwd">Confirm Password:</label>
+                  <input type="password" class="form-control" id="signup_confirm_password">
+                  <span id="confirmpassword_span" style="color: rgba(211, 0, 0, 0.712); font-size:13px;"></span>
+              </div>
+            </div>
+              <!-- Modal footer -->
+            <div class="modal-footer modal-footer-success">
+              <button type="button" class="btn btn-primary" id="regmodal_submitbtn" style="float:right;">Submit</button>  
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
         <!-- Signin Modal -->
       <div class="modal fade" id="modalSignIn">
         <div class="modal-dialog">
           <div class="modal-content">
             <!-- Modal Header -->
-            <div class="modal-header">
+            <div class="modal-header modal-header-success">
               <h4 class="modal-title">Signing In</h4>
               <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <!-- Modal body -->
-            <div class="modal-body">
+            <div class="modal-body modal-body-success">
                 <form action="/action_page.php">
                   <div class="form-group">
                     <label for="email">Email address:</label>
@@ -155,13 +210,13 @@ session_start();
                   </div>
                   <div class="form-check text-center">
                     <label class="form-check-label">
-                      <input class="form-check-input" type="checkbox"> Remember me
+                      <input class="form-check-input" id="rememberme_checkbox" type="checkbox"> Remember me
                     </label>
                   </div>
                 </form>
             </div>
             <!-- Modal footer -->
-            <div class="modal-footer">
+            <div class="modal-footer modal-footer-success">
               <button type="button" class="btn btn-primary" id="signinModal_submitButton">Submit</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
@@ -171,6 +226,7 @@ session_start();
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/jquery/jquery.cookie.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Plugin JavaScript -->
@@ -212,6 +268,7 @@ session_start();
         });
 
         $("#signupModal_submitButton").click(function(){
+          console.log('initiate');
           var firstname = $('#signup_firstname').val();
           var lastname = $('#signup_lastname').val();
           var email = $('#signup_email').val();
@@ -221,28 +278,68 @@ session_start();
           console.log(firstname +" "+ lastname+" "+email+" "+telephone+" "+password+" "+confirm_password);
           console.log(password == confirm_password);
           if(firstname!='' && lastname!='' && email!='' && telephone!='' && password!='' && confirm_password!=''){
-            if(password == confirm_password){
-              $.ajax({
-                  url: "php/index/index_be.php",
-                  method: "POST",
-                  data: {firstname:firstname, lastname:lastname, email:email, telephone:telephone, password:password},
-                  success: function(data){
-                    console.log(data);
-                    if(data == 1){
-                      //JSalert_useradding_success();
-                      $("#modalSignUp").modal("toggle");
-                      window.location.href = "http://localhost/letsvote/voter_home.php";
-                    }else{
-                      alert('user registration failed');
+            if(validationFunction(firstname, lastname, telephone, email, password) == true){
+              if(password == confirm_password){
+                $.ajax({
+                    url: "php/index/index_be.php",
+                    method: "POST",
+                    data: {firstname:firstname, lastname:lastname, email:email, telephone:telephone, password:password},
+                    success: function(data){
+                      console.log(data);
+                      if(data == 1){
+                        //JSalert_useradding_success();
+                        $("#modalSignUp").modal("toggle");
+                        window.location.href = "http://localhost/letsvote/voter_home.php";
+                      }else{
+                        alert('user registration failed');
+                      }
                     }
-                  }
-              });
-            }else{
-              alert('passwords do not match');
+                });
+              }else{
+                document.getElementById('confirmpassword_span').innerText = "*passwords do not match";
+              }
             }
           }else{
             alert('fill in all the fields')
           }
+        });
+
+        $("#regmodal_submitbtn").click(function(){
+          var firstname = $('#signup_firstname').val();
+          var lastname = $('#signup_lastname').val();
+          var email = $('#signup_email').val();
+          var telephone = $('#signup_telephone').val();
+          var password = $('#signup_password').val();
+          var confirm_password = $('#signup_confirm_password').val();
+          console.log(firstname +" "+ lastname+" "+email+" "+telephone+" "+password+" "+confirm_password);
+          console.log(password == confirm_password);
+          
+          if(firstname!='' && lastname!='' && email!='' && telephone!='' && password!='' && confirm_password!=''){
+            if(validationFunction(firstname, lastname, telephone, email, password) == true){
+              if(password == confirm_password){
+                $.ajax({
+                    url: "php/index/index_be.php",
+                    method: "POST",
+                    data: {firstnameDup1: firstname, lastname: lastname, email: email, telephone: telephone, password: password},
+                    success: function(data){
+                      console.log(data);
+                      if(data == 1){
+                        //JSalert_useradding_success();
+                        $("#modalSignUp").modal("toggle");
+                        window.location.href = "http://localhost/letsvote/admin_home.php";
+                      }else{
+                        alert('user registration failed');
+                      }
+                    }
+                });
+              }else{
+                document.getElementById('confirmpassword_span').innerText = "*passwords do not match";
+              }
+            }
+          }else{
+            alert('fill in all the fields')
+          }
+          
         });
 
         $('#signinModal_submitButton').click(function(){
@@ -268,6 +365,10 @@ session_start();
                     }else{
                       alert('Invalid username or password. Try again!')
                     }
+                    //remember me checkbox
+                    if($('#rememberme_checkbox').val()){
+                      //rememberMe(email, password);
+                    }
                   }
             });
           }else{
@@ -290,6 +391,10 @@ session_start();
                 $modal.find('.edit-content').html(data);
             }
           });
+        })
+
+        $('#modalSignIn').on('show.bs.modal', function(e) {
+          //fillByMemory();
         })
       ////////////////////////////////////////////////////////////////////
       });
@@ -332,6 +437,113 @@ session_start();
         });
       }
       //////////////////////////////////////////////////////////////////////
+
+      // validation functionalities
+
+      function validationFunction(firstname, lastname, telephone, email, password){
+        var validated = true;
+        var firstname_validated = inputAlphabet(firstname);
+        if(firstname_validated == false){
+          validated = false;
+          //console.log(1);
+          document.getElementById('firstname_span').innerText = "*invalid first name";
+        }else{
+          document.getElementById('firstname_span').innerText = "";
+        }
+
+        var lastname_validated = inputAlphabet(lastname);
+        if(lastname_validated == false){
+          validated = false;
+          document.getElementById('lastname_span').innerText = "*invalid last name";
+        }else{
+          document.getElementById('lastname_span').innerText = "";
+        }
+
+        var telephone_validated = telephoneValidation(telephone);
+        if(telephone_validated == false){
+          validated = false;
+          document.getElementById('telephone_span').innerText = "*invalid telephone number";
+        }else{
+          document.getElementById('telephone_span').innerText = "";
+        }
+
+        var email_validated = emailValidation(email);
+        if(email_validated == false){
+          validated = false;
+          document.getElementById('email_span').innerText = "*invalid e-mail address";
+        }else{
+          document.getElementById('email_span').innerText = "";
+        }
+
+        var password_validated = lengthDefine(password, 8, 50);
+        if(password_validated == false){
+          validated = false;
+          document.getElementById('password_span').innerText = "*must have more than 8 characters";
+        }else{
+          document.getElementById('password_span').innerText = "";
+        }
+        console.log('validated: '+validated);
+        return validated;   
+      }
+
+      function inputAlphabet(inputtext){  
+        var alphaExp = /^[a-zA-Z]+$/;
+        if(inputtext.match(alphaExp)){
+          return true;
+        }else{
+          return false;
+        }
+      }
+
+      function lengthDefine(inputtext, min, max){
+        var uInput = inputtext;
+        if(uInput.length >= min && uInput.length <= max){
+          return true;
+        }else{
+          return false;
+        }
+      }
+
+      function telephoneValidation(inputtext){
+        console.log(inputtext)
+        var telephoneExp = /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;
+        if(inputtext.match(telephoneExp)){
+          return true;
+        }else{
+          return false;
+        }
+      }
+
+      function emailValidation(inputtext){
+        var emailExp = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if(inputtext.match(emailExp)){
+          return true;
+        }else{
+          return false;
+        }
+      }
+      ////////////////////////////////////////////////////////////////////////////////////////////
+      // Remember Me Functionality in Sign In form
+      function fillByMemory(){
+        $('#signin_email').val(localStorage.email);
+        $('#signin_password').val(localStorage.password);
+        // if(!!$.cookie('email')){
+        //   $('#signin_email').val($.cookie('email'));
+        //   console.log('filling')
+        // if(!!$.cookie('password')){
+        //   $('#signin_password').val($.cookie('password'));
+        // }
+      }
+
+      function rememberMe(email, password){
+        console.log('email: '+ email);
+        localStorage.email = email;
+        localStorage.password = password;
+          
+        //$.cookie('email',$('#signin_email').val());
+        //$.cookie('password',$('#signin_password').val());
+      }
+
     </script>
   </body>
 

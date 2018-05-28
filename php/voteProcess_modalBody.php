@@ -1,18 +1,19 @@
 <?php
 
-include_once 'model/pin.php';
+include_once 'model/committee_user.php';
 include_once 'model/committee.php';
 include_once 'model/candidate.php';
 include_once 'controller/election_controller.php';
 include_once 'view/election_view.php';
 include_once 'crud.php';
 session_start();
+$user_id = $_SESSION['user_id'];
 
 if(isset($_POST['committeeID'])){
     $committeeID=$_POST['committeeID'];
-    $pin = new Pin($committeeID);
-    $election_controller = new ElectionController($pin);
-    $election_view = new ElectionView($election_controller, $pin);
+    $committee_user = new Committee_User($committeeID, $user_id);
+    $election_controller = new ElectionController($committee_user);
+    $election_view = new ElectionView($election_controller, $committee_user);
 
     //getting elected candidate
     $candidate_id = $election_view->getSelectedCandidateID(); 

@@ -14,7 +14,7 @@ for($x=0; $x<$committee_count; $x++){
         <div class="container">
             <div class="row">
                 <div class="col-sm-9"><input type="text" placeholder="committee / party name" class="form-control" id="committee_name'.$x.'"></div>
-                <div class="col-sm-3"><input type="number" placeholder="count" class="form-control" id="count'.$x.'"></div>
+                <div class="col-sm-3"><input type="number" placeholder="count" style="padding-left: 10px;" class="form-control" id="count'.$x.'"></div>
             </div>
         </div>
     </div>
